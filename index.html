@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <my-button text="測試"></my-button>
+    <my-button text="點擊"></my-button>
+</body>
+
+<script>
+    class MyButton extends HTMLElement {
+        static style = `
+            #btn {
+                display: inline-block;
+                background-color: black;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                cursor: pointer;
+            }
+            `
+        constructor() {
+            super();
+            this.attachShadow({ mode: 'open' });
+            this.render();
+            this.styling();
+        }
+        render() {
+            this.btn = document.createElement('div');
+
+            this.btn.textContent = this.getAttribute('text');
+            this.shadowRoot.appendChild(this.btn);
+            this.btn.id = 'btn';
+        }
+        styling() {
+            this.stylesheet = document.createElement('style');
+            this.stylesheet.textContent = this.constructor.style;
+            this.shadowRoot.appendChild(this.stylesheet);
+
+        }
+    }
+    window.customElements.define('my-button', MyButton);
+
+</script>
+
+</html>
+<!-- 創建webcompoent 三步驟 -->
+<!-- 
+    1.創建class 並extends HTMLElement
+    2.寫出構造函示 constructor(){
+        super();繼承HTMLElement的方法
+        this.attachShadow({mode:'open'});打開shadowRoot
+        
+    }
+    3.告訴瀏覽器這是一個自定義元素，從標籤到類 window.customElements.define('my-button',MyButton);
+ -->
+<!-- webcomponet 創建元素三步驟 -->
+<!-- 
+1.創建元素 createElement
+2.寫入內容 textContent
+3.加入到頁面 shodowRoot.appendChild
+
+ -->
+<!-- 1:19:41 -->
