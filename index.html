@@ -5,11 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
 </head>
 
 <body>
-    <my-button text="測試"></my-button>
-    <my-button text="點擊"></my-button>
+    <my-button class="abc" id="target" text="測試"></my-button>
+    <my-button id="button" text="點擊"></my-button>
 </body>
 
 <script>
@@ -24,18 +25,35 @@
                 cursor: pointer;
             }
             `
+        static get observedAttributes() {
+            return ['text'];
+        }
+        attributeChangedCallback(name, oldValue, newValue) {
+            console.log(name, oldValue, newValue);
+            this.render();
+        }
         constructor() {
             super();
             this.attachShadow({ mode: 'open' });
             this.render();
             this.styling();
+            // this.linkcss();從外部引入css
         }
         render() {
+            if (this.btn) {
+                this.btn.remove();
+            }
             this.btn = document.createElement('div');
 
             this.btn.textContent = this.getAttribute('text');
             this.shadowRoot.appendChild(this.btn);
             this.btn.id = 'btn';
+        }
+        linkcss() {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'style.css';
+            this.shadowRoot.appendChild(link);
         }
         styling() {
             this.stylesheet = document.createElement('style');
@@ -46,6 +64,14 @@
     }
     window.customElements.define('my-button', MyButton);
 
+</script>
+<script>
+    const button = document.getElementById('button');
+    button.addEventListener('click', () => {
+        const target = document.getElementById('target');
+        target.setAttribute('text', '點擊成功');
+        console.log('點擊成功');
+    });
 </script>
 
 </html>
@@ -64,7 +90,26 @@
 1.創建元素 createElement
 2.寫入內容 textContent
 3.加入到頁面 shodowRoot.appendChild
+-->
 
- -->
+<!-- 與webcomponent 互動三步驟 -->
+<!-- 
+ 1. 監聽 satic get observedAttributes(){} 這個方法
+ 2. 如果有變化就會觸發 attributeChangedCallback(name, oldValue, newValue)這個方法
+ 3. 在裡面寫入要觸發的方法
+-->
+
+<!--
+1.直接在webconmponent裡面寫class外部css試吃的到的
+2.可以用link引入外部css
+3.可以分檔案
+(1) 分檔案用.mjs
+(2) export default
+(3) type=module
+(4) import
+  -->
+
+
+
 <!-- https://www.youtube.com/watch?v=Ne1sZZFNfoc&t=4767s -->
 <!-- 1:19:41 -->
